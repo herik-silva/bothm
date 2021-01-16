@@ -1,4 +1,7 @@
 const wa = require('@open-wa/wa-automate');
-const start = require('./src/start');
 
-wa.create().then(client => start(client,"Hi"));
+const robo = {
+    enviarMensagem: require('./src/enviarMensagem'),
+}
+
+wa.create().then(client => robo.enviarMensagem(client));
