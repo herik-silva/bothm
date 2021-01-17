@@ -7,9 +7,17 @@ async function getFundador(msg,cli){
     }
 }
 
+const wa = require('@open-wa/wa-automate');
+
+
 const palavrasReservadas = {
     prefixo: "!",
     listaComandos: [
+        {
+            nome: "Add",
+            descricao: "Adiciona um integrante do grupo(O bot precisa ser admin)!",
+            exemplo: "!Add +55123456789"
+        },
         {
             nome: "Creditos",
             descricao: "Conheça quem são os responsáveis por me criarem =)",
@@ -21,24 +29,14 @@ const palavrasReservadas = {
             exemplo: "!Enem"
         },
         {
-            nome: "ImgFigurinha",
-            descricao: "Transforma Imagem em Figurinha!",
-            exemplo: "Envie uma foto ou marque uma imagem do chat com o comando !ImgFigurinha"
-        },
-        {
-            nome: "VidFigurinha",
-            descricao: "Transforma Vídeo/Gif em Figurinha Animada!",
-            exemplo: "Envie um vídeo/gif ou marque um vídeo/gif  do chat com o comando !VidFigurinha"
-        },
-        {
-            nome: "Meme",
-            descricao: "É enviado um Meme Aleatório!",
-            exemplo: "!Meme"
-        },
-        {
             nome: "Fundador",
             descricao: "Mostra o criador do Grupo!",
             exemplo: "!Fundador"
+        },
+        {
+            nome: "ImgFigurinha",
+            descricao: "Transforma Imagem em Figurinha!",
+            exemplo: "Envie uma foto ou marque uma imagem do chat com o comando !ImgFigurinha"
         },
         {
             nome: "Kick",
@@ -46,25 +44,59 @@ const palavrasReservadas = {
             exemplo: "!kick +55123456789"
         },
         {
-            nome: "Add",
-            descricao: "Adiciona um integrante do grupo(O bot precisa ser admin)!",
-            exemplo: "!Add +55123456789"
-        }
+            nome: "Meme",
+            descricao: "É enviado um Meme Aleatório!",
+            exemplo: "!Meme"
+        },
+        {
+            nome: "VidFigurinha",
+            descricao: "Transforma Vídeo/Gif em Figurinha Animada!",
+            exemplo: "Envie um vídeo/gif ou marque um vídeo/gif  do chat com o comando !VidFigurinha"
+        },
     ],
     helpComandos: "",
 
-    "AJUDA": async(client,mensagem)=>{
+    "ADD": async(client,mensagem,parametro)=>{
+        // Verificar se o BOT é ADM e se o usuário que mandou a mensagem também é ADM.
+        console.log("Entrando em ADD")
+
+        if(parametro!=null && mensagem.isGroupMsg){
+            console.log("Existe parâmetros e a mensagem veio de um grupo!");
+
+            // for(let i=0; i<parametro.length; i++){
+            //     try{
+            //         console.log(mensagem.chat.groupMetadata);
+            //         console.log("=======================")
+            //         console.log(mensagem.from);
+
+                    
+            //         await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
+            //     }catch(err){
+            //         console.log("ERRO: " + err);
+            //         await client.sendText(mensagem.from, `O número *${parametro[i]}* não pode ser adicionado!`);
+            //     }
+            // }
+            await client.addParticipant(mensagem.from, parametro[0]);
+        }
+        else{
+            console.log("Sem parametros ou não veio de um grupo!");
+            await client.sendText(mensagem.from, `Esse comando requer parâmetros. Ex: ${palavrasReservadas.listaComandos[0].exemplo}`);
+        }
+    },
+
+    "AJUDA": async(client,mensagem,parametro)=>{
         await client.sendText(mensagem.from, `*LISTA DE COMANDOS*\n${palavrasReservadas.helpComandos}`);
     },
 
-    "CREDITOS": async(client,mensagem)=>{
+    "CREDITOS": async(client,mensagem,parametro)=>{
         await client.sendText(mensagem.from, "Desenvolvido por: Herik Ramos & Marco Antônio");
     },
 
-    "ENEM": async(client,mensagem)=>{
+    "ENEM": async(client,mensagem,parametro)=>{
         await client.sendText(mensagem.from, "*O participante deve ingressar no local de prova entre 11h30 e 12h59. O portão fecha às 13h e o edital é claro: nenhuma pessoa pode entrar após este horário. Todos os participantes devem se dirigir para as suas salas de aplicação designadas no Cartão de Confirmação do Enem. A prova será iniciada às 13h30.*")
     },
-    "FUNDADOR": async(client,mensagem)=>{
+
+    "FUNDADOR": async(client,mensagem,parametro)=>{
         await getFundador(mensagem,client);
     },
 
