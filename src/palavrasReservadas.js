@@ -63,20 +63,19 @@ const palavrasReservadas = {
         if(parametro!=null && mensagem.isGroupMsg){
             console.log("Existe parâmetros e a mensagem veio de um grupo!");
 
-            // for(let i=0; i<parametro.length; i++){
-            //     try{
-            //         console.log(mensagem.chat.groupMetadata);
-            //         console.log("=======================")
-            //         console.log(mensagem.from);
+            for(let i=0; i<parametro.length; i++){
+                try{
+                    const id = parametro[i] + "@c.us";
 
+                    console.log("ID DO USUARIO: " + id);
                     
-            //         await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
-            //     }catch(err){
-            //         console.log("ERRO: " + err);
-            //         await client.sendText(mensagem.from, `O número *${parametro[i]}* não pode ser adicionado!`);
-            //     }
-            // }
-            await client.addParticipant(mensagem.from, parametro[0]);
+                    await client.addParticipant(mensagem.from, id);
+                    await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
+                }catch(err){
+                    console.log("ERRO: " + err);
+                    await client.sendText(mensagem.from, `O número *${parametro[i]}* não pode ser adicionado!`);
+                }
+            }
         }
         else{
             console.log("Sem parametros ou não veio de um grupo!");
