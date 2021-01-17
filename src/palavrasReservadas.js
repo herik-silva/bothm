@@ -1,3 +1,12 @@
+async function getFundador(msg,cli){
+    if(msg.isGroupMsg){
+        Fundador =  msg.chat.groupMetadata.owner;
+        await cli.sendTextWithMentions(msg.from, `Fundador Do Grupo : @${Fundador}`);
+    }else{
+        await cli.sendText(msg.from, "Este comando necessita que você e o fundador esteja em um grupo :(");
+    }
+}
+
 const palavrasReservadas = {
     prefixo: "!",
     listaComandos: [
@@ -54,6 +63,9 @@ const palavrasReservadas = {
 
     "ENEM": async(client,mensagem)=>{
         await client.sendText(mensagem.from, "*O participante deve ingressar no local de prova entre 11h30 e 12h59. O portão fecha às 13h e o edital é claro: nenhuma pessoa pode entrar após este horário. Todos os participantes devem se dirigir para as suas salas de aplicação designadas no Cartão de Confirmação do Enem. A prova será iniciada às 13h30.*")
+    },
+    "FUNDADOR": async(client,mensagem)=>{
+        await getFundador(mensagem,client);
     },
 
 }
