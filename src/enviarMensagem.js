@@ -7,13 +7,14 @@ module.exports = function enviarMensagem(client){
         
         const palavraReservada = comando.split(palavrasReservadas.prefixo)[1].toUpperCase();
 
-        console.log(palavraReservada);
-
         const prefixoCorreto = palavrasReservadas.prefixo == comando.charAt(0);
         const comandoExiste = palavrasReservadas[palavraReservada] != undefined;
         
         if(comandoExiste && prefixoCorreto){
             palavrasReservadas[palavraReservada](client,mensagem);
+        }
+        else{
+            await client.sendText(mensagem.from, "Comando inválido.\nPara visualizar os comandos existentes digite *!ajuda*");
         }
     });
 }
