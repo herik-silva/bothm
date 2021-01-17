@@ -61,9 +61,13 @@ const palavrasReservadas = {
                 try{
                     // Preparando a ID do novo membro
                     const id = parametro[i] + "@c.us";
-                    
-                    await client.addParticipant(mensagem.from, id);
-                    await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
+                    await client.addParticipant(mensagem.from, id).then(async adicionado =>{
+                        if(adicionado){
+                            await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
+                        }
+
+                    });
+                   // await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
                 }catch(err){
                     console.log("ERRO: " + err);
                     await client.sendText(mensagem.from, `O número *${parametro[i]}* não pode ser adicionado!`);
@@ -89,6 +93,9 @@ const palavrasReservadas = {
     },
 
     "FUNDADOR": async(client,mensagem,parametro)=>{
+        await getFundador(mensagem,client);
+    },
+    "KICK": async(client,mensagem,parametro)=>{
         await getFundador(mensagem,client);
     },
 
