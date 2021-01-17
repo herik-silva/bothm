@@ -7,9 +7,6 @@ async function getFundador(msg,cli){
     }
 }
 
-const wa = require('@open-wa/wa-automate');
-
-
 const palavrasReservadas = {
     prefixo: "!",
     listaComandos: [
@@ -58,16 +55,12 @@ const palavrasReservadas = {
 
     "ADD": async(client,mensagem,parametro)=>{
         // Verificar se o BOT é ADM e se o usuário que mandou a mensagem também é ADM.
-        console.log("Entrando em ADD")
 
         if(parametro!=null && mensagem.isGroupMsg){
-            console.log("Existe parâmetros e a mensagem veio de um grupo!");
-
             for(let i=0; i<parametro.length; i++){
                 try{
+                    // Preparando a ID do novo membro
                     const id = parametro[i] + "@c.us";
-
-                    console.log("ID DO USUARIO: " + id);
                     
                     await client.addParticipant(mensagem.from, id);
                     await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
