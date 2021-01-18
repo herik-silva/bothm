@@ -101,7 +101,7 @@ const palavrasReservadas = {
     },
     "IMGFIGURINHA": async(client,mensagem,parametro)=>{
         if(mensagem.type == "image"){
-            await client.sendText(mensagem.from,"trabaiano pra fazer a fig B) ");
+            await client.sendText(mensagem.from,"trabaiano pra fazer a fig B) , aguarde");
             const imagemDesencriptada = await decryptMedia(mensagem);
             const imagemNaBase64 = imagemDesencriptada.toString('base64');
             await client.sendImageAsSticker(mensagem.from,`data:${mensagem.mimetype};base64,${imagemNaBase64}`);
