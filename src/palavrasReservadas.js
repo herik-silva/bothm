@@ -53,6 +53,7 @@ const palavrasReservadas = {
     ],
     helpComandos: "",
 
+    // Método ainda com alguns problemas.
     "ADD": async(client,mensagem,parametro)=>{
         // Verificar se o BOT é ADM e se o usuário que mandou a mensagem também é ADM.
 
