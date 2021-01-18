@@ -64,8 +64,9 @@ const palavrasReservadas = {
                     await client.addParticipant(mensagem.from, id).then(async adicionado =>{
                         if(adicionado){
                             await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
+                        }else{
+                            await client.sendText(mensagem.from, `O número *${parametro[i]}* não pode ser adicionado!`);
                         }
-
                     });
                    // await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
                 }catch(err){
@@ -96,7 +97,24 @@ const palavrasReservadas = {
         await getFundador(mensagem,client);
     },
     "KICK": async(client,mensagem,parametro)=>{
-        await getFundador(mensagem,client);
+        
+        const ListaDeMensoes = mensagem.mentionedJidList;
+        const GrupoDeAdmins = await client.getGroupAdmins(mensagem.chat.groupMetadata.id);
+        const podeRemover = mensagem.isGroupMsg && await GrupoDeAdmins.includes(await client.getHostNumber() + '@c.us') && await GrupoDeAdmins.includes(mensagem.sender.id);
+        //Verifica se está em um grupo / se é admin / se o bot é admin 
+        if(podeRemover){
+            for(let i=0; i<ListaDeMensoes.length; i++){
+                //verifica se o usuário a ser removido não é um admin
+                if(!await GrupoDeAdmins.includes(ListaDeMensoes[i])){
+                    await client.sendTextWithMentions(mensagem.from,`@${ListaDeMensoes[i]} Cinzado bicho!`);
+                    await client.removeParticipant(mensagem.from, ListaDeMensoes[i]);
+                }else{
+                    await client.sendTextWithMentions(mensagem.from,`@${mensagem.sender.id} Não pode remover o admin :)!`);
+                }
+            }
+        }else{
+            await client.sendTextWithMentions(mensagem.from,`@${mensagem.sender.id} não posso remover :( \n Requisitos(Esteja em um grupo, seja adm, dê adm para o bot)!`);
+        }
     },
 
 }
