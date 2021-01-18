@@ -1,3 +1,5 @@
+const { decryptMedia } = require('@open-wa/wa-decrypt')
+
 async function getFundador(msg,cli){
     if(msg.isGroupMsg){
         Fundador =  msg.chat.groupMetadata.owner;
@@ -38,7 +40,7 @@ const palavrasReservadas = {
         {
             nome: "Kick",
             descricao: "Remove um integrante do grupo(O bot precisa ser admin)!",
-            exemplo: "!kick +55123456789"
+            exemplo: "!kick @mention"
         },
         {
             nome: "Meme",
@@ -87,7 +89,7 @@ const palavrasReservadas = {
     },
 
     "CREDITOS": async(client,mensagem,parametro)=>{
-        await client.sendText(mensagem.from, "Desenvolvido por: Herik Ramos & Marco Antônio");
+        await client.sendText(mensagem.from, "Desenvolvido por: Herik Ramos & Marco Antônio Discord https://discord.gg/Y8vcyNEX28");
     },
 
     "ENEM": async(client,mensagem,parametro)=>{
@@ -96,6 +98,15 @@ const palavrasReservadas = {
 
     "FUNDADOR": async(client,mensagem,parametro)=>{
         await getFundador(mensagem,client);
+    },
+
+    "IMGFIGURINHA": async(client,mensagem,parametro)=>{
+        if(mensagem.type == "image"){
+            await client.sendText(mensagem.from,"trabaiano pra fazer a fig B) , aguarde");
+            const imagemDesencriptada = await decryptMedia(mensagem);
+            const imagemNaBase64 = imagemDesencriptada.toString('base64');
+            await client.sendImageAsSticker(mensagem.from,`data:${mensagem.mimetype};base64,${imagemNaBase64}`);
+        }
     },
     "KICK": async(client,mensagem,parametro)=>{
         
