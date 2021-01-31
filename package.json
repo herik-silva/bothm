@@ -20,6 +20,7 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "@open-wa/wa-automate": "^3.1.13",
-    "ffmpeg": "0.0.4"
+    "ffmpeg": "0.0.4",
+    "weather-js": "^2.0.0"
   }
 }

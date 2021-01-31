@@ -9,6 +9,10 @@ async function getFundador(msg,cli){
     }
 }
 
+const wa = require('@open-wa/wa-automate');
+const weather = require('weather-js');
+
+
 const palavrasReservadas = {
     prefixo: "!",
     listaComandos: [
@@ -18,14 +22,14 @@ const palavrasReservadas = {
             exemplo: "!Add +55123456789"
         },
         {
+            nome: "AnimFigurinha",
+            descricao: "Cria uma figurinha animada do link enviado. Acesse www.giphy.com e copie e escolha um gif.(Funciona apenas nesse site)",
+            exemplo: "!Animfigurinha https://media.giphy.com/media/p37zQEvmBhwLipmiqV/giphy.gif"
+        },
+        {
             nome: "Creditos",
             descricao: "Conheça quem são os responsáveis por me criarem =)",
             exemplo: "!Creditos"
-        },
-        {
-            nome: "Enem",
-            descricao: "Fique por dentro das novidades sobre o ENEM!",
-            exemplo: "!Enem"
         },
         {
             nome: "Fundador",
@@ -46,6 +50,11 @@ const palavrasReservadas = {
             nome: "Meme",
             descricao: "É enviado um Meme Aleatório!",
             exemplo: "!Meme"
+        },
+        {
+            nome: "Temperatura",
+            descricao: "Descubra a temperatura atual da sua cidade!",
+            exemplo: "!Temperatura São Paulo"
         },
         {
             nome: "VidFigurinha",
@@ -88,12 +97,33 @@ const palavrasReservadas = {
         await client.sendText(mensagem.from, `*LISTA DE COMANDOS*\n${palavrasReservadas.helpComandos}`);
     },
 
-    "CREDITOS": async(client,mensagem,parametro)=>{
-        await client.sendText(mensagem.from, "Desenvolvido por: Herik Ramos & Marco Antônio Discord https://discord.gg/Y8vcyNEX28");
+        /**
+     * 
+     * @param {wa.Client} client 
+     * @param {wa.Message} mensagem 
+     * @param {Array} parametro 
+     */
+    "ANIMFIGURINHA": async(client,mensagem,parametro)=>{
+        const STATUS_ARQUIVO_GRANDE = 413;
+        for(let i=0; i<parametro.length; i++){
+            let id = parametro[i].split('/')[4];
+            console.log(id);
+            try{
+                const retorno = await client.sendGiphyAsSticker(mensagem.from, id);
+                console.log(retorno.status);
+                if(retorno.status==STATUS_ARQUIVO_GRANDE){
+                    await client.sendText(mensagem.from,"Infelizmente o gif é muito grande para criar uma figurinha =(");
+
+                }
+            }catch(err){
+                console.log(err);
+                await client.sendText(mensagem.from,"Verifique se o gif é do site www.media.giphy.com.");
+            }
+        }
     },
 
-    "ENEM": async(client,mensagem,parametro)=>{
-        await client.sendText(mensagem.from, "*O participante deve ingressar no local de prova entre 11h30 e 12h59. O portão fecha às 13h e o edital é claro: nenhuma pessoa pode entrar após este horário. Todos os participantes devem se dirigir para as suas salas de aplicação designadas no Cartão de Confirmação do Enem. A prova será iniciada às 13h30.*")
+    "CREDITOS": async(client,mensagem,parametro)=>{
+        await client.sendText(mensagem.from, "Desenvolvido por: Herik Ramos & Marco Antônio Discord https://discord.gg/Y8vcyNEX28");
     },
 
     "FUNDADOR": async(client,mensagem,parametro)=>{
@@ -108,6 +138,7 @@ const palavrasReservadas = {
             await client.sendImageAsSticker(mensagem.from,`data:${mensagem.mimetype};base64,${imagemNaBase64}`);
         }
     },
+
     "KICK": async(client,mensagem,parametro)=>{
         
         const ListaDeMensoes = mensagem.mentionedJidList;
@@ -128,6 +159,43 @@ const palavrasReservadas = {
             await client.sendTextWithMentions(mensagem.from,`@${mensagem.sender.id} não posso remover :( \n Requisitos(Esteja em um grupo, seja adm, dê adm para o bot)!`);
         }
     },
+
+    /**
+     * 
+     * @param {wa.Client} client 
+     * @param {wa.Message} mensagem 
+     * @param {Array} paramentro 
+     */
+    "TEMPERATURA": async(client,mensagem,parametro)=>{
+        const cidade = parametro[0];
+        const emojis = {
+            "Sunny": '🌤️',
+            'Mostly Sunny': '☀️',
+            'Cloudy': '⛅',
+            'Mostly Cloudy': '☁️'
+        }
+
+        const options = {
+            search: cidade,
+            degreeType: 'F'
+        }
+        
+        weather.find(options, async(err,result)=>{
+            if(err){
+                await client.sendText(mensagem.from, "Desculpe, essa cidade não está no meu banco de dados 😔");
+            }
+            else{
+                const clima = result[0].current;
+                console.log(clima.temperature + " " + emojis[clima.skytext]);
+                const celsius = parseInt(5/9 * (parseInt(clima.temperature)-32));
+                console.log(clima.skytext);
+                
+                await client.sendText(mensagem.from, `Temperatura atual em ${cidade}: ${emojis[clima.skytext]} ${celsius}°C`)
+                
+            }
+        })
+
+    }
 
 }
 
