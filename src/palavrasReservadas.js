@@ -57,8 +57,13 @@ const palavrasReservadas = {
         },
         {
             nome: "Meme",
-            descricao: "É enviado um Meme Aleatório!",
+            descricao: "É enviado um Meme Aleatório!(Em Desenvolvimento)",
             exemplo: "!Meme"
+        },
+        {
+            nome: "Mencionar Todos",
+            descricao: "Menciona todos os membros do grupo.",
+            exemplo: "!Mencionartodos"
         },
         {
             nome: "Temperatura",
@@ -67,7 +72,7 @@ const palavrasReservadas = {
         },
         {
             nome: "VidFigurinha",
-            descricao: "Transforma Vídeo/Gif em Figurinha Animada!",
+            descricao: "Transforma Vídeo/Gif em Figurinha Animada!(Em Desenvolvimento)",
             exemplo: "Envie um vídeo/gif ou marque um vídeo/gif  do chat com o comando !VidFigurinha"
         },
         {
@@ -111,12 +116,6 @@ const palavrasReservadas = {
         await client.sendText(mensagem.from, `*LISTA DE COMANDOS*\n${palavrasReservadas.helpComandos}`);
     },
 
-        /**
-     * 
-     * @param {wa.Client} client 
-     * @param {wa.Message} mensagem 
-     * @param {Array} parametro 
-     */
     "ANIMFIGURINHA": async(client,mensagem,parametro)=>{
         const STATUS_ARQUIVO_GRANDE = 413;
         for(let i=0; i<parametro.length; i++){
@@ -154,10 +153,10 @@ const palavrasReservadas = {
     },
 
     "KICK": async(client,mensagem,parametro)=>{
-        
         const ListaDeMensoes = mensagem.mentionedJidList;
         const GrupoDeAdmins = await client.getGroupAdmins(mensagem.chat.groupMetadata.id);
         const podeRemover = mensagem.isGroupMsg && await GrupoDeAdmins.includes(await client.getHostNumber() + '@c.us') && await GrupoDeAdmins.includes(mensagem.sender.id);
+
         //Verifica se está em um grupo / se é admin / se o bot é admin 
         if(podeRemover){
             for(let i=0; i<ListaDeMensoes.length; i++){
@@ -178,13 +177,69 @@ const palavrasReservadas = {
      * 
      * @param {wa.Client} client 
      * @param {wa.Message} mensagem 
+     * @param {Array} paramentro 
+     */
+    "MENCIONARTODOS": async(client, mensagem, parametro)=>{
+        const listaDeMembros = mensagem.chat.groupMetadata.participants;
+        
+        var mensagemPreparada = "|== MENCIONAR TODOS ==|\n";
+
+        listaDeMembros.forEach(membro => {
+            console.log(membro);
+            const numero = membro.id.split('@c')[0];
+            mensagemPreparada += `@${numero} \n`;
+        });
+
+        await client.sendTextWithMentions(mensagem.from, mensagemPreparada);
+    },
+
+    "TEMPERATURA": async(client,mensagem,parametro)=>{
+        const cidade = parametro[0]; // Nome da cidade
+
+        // Lista de emojis 4/?
+        const emojis = {
+            "Sunny": '🌤️',
+            'Mostly Sunny': '☀️',
+            'Cloudy': '⛅',
+            'Mostly Cloudy': '☁️',
+            'Rain': '🌧'
+        }
+
+        // Configurações da busca
+        const options = {
+            search: cidade,
+            degreeType: 'F'
+        }
+        
+        // Realiza a busca e envia a mensagem com o resultado
+        weather.find(options, async(err,result)=>{
+            if(err){
+                await client.sendText(mensagem.from, "Desculpe, essa cidade não está no meu banco de dados 😔");
+            }
+            else{
+                const clima = result[0].current;
+                console.log(clima.temperature + " " + emojis[clima.skytext]);
+                const celsius = parseInt(5/9 * (parseInt(clima.temperature)-32));
+                console.log(clima.skytext);
+                
+                await client.sendText(mensagem.from, `Temperatura atual em ${cidade}: ${emojis[clima.skytext]} ${celsius}°C`)
+                
+            }
+        })
+
+    },
+
+    /**
+     * 
+     * @param {wa.Client} client 
+     * @param {wa.Message} mensagem 
      * @param {Array} parametro 
      */
     "YOUTUBEMP3": async(client, mensagem, parametro)=>{
         const parametro_dividido = parametro[0].split('/');
         var id_video = parametro_dividido[parametro_dividido.length-1];
-        console.log(process.env.KEY);
 
+        // Verifica se o link é o web.
         if(id_video.length > 11){
             id_video = id_video.split('v=')[1];
         }
@@ -202,6 +257,7 @@ const palavrasReservadas = {
             }
         };
 
+        // Fazendo a requisição para API
         request(options, function (error, response, body) {
             if (error){
                 client.sendText(mensagem.from, "Não foi possível criar o link do vídeo =(");
@@ -214,44 +270,6 @@ const palavrasReservadas = {
         });
 
     },
-
-    /**
-     * 
-     * @param {wa.Client} client 
-     * @param {wa.Message} mensagem 
-     * @param {Array} paramentro 
-     */
-    "TEMPERATURA": async(client,mensagem,parametro)=>{
-        const cidade = parametro[0];
-        const emojis = {
-            "Sunny": '🌤️',
-            'Mostly Sunny': '☀️',
-            'Cloudy': '⛅',
-            'Mostly Cloudy': '☁️',
-            'Rain': '🌧'
-        }
-
-        const options = {
-            search: cidade,
-            degreeType: 'F'
-        }
-        
-        weather.find(options, async(err,result)=>{
-            if(err){
-                await client.sendText(mensagem.from, "Desculpe, essa cidade não está no meu banco de dados 😔");
-            }
-            else{
-                const clima = result[0].current;
-                console.log(clima.temperature + " " + emojis[clima.skytext]);
-                const celsius = parseInt(5/9 * (parseInt(clima.temperature)-32));
-                console.log(clima.skytext);
-                
-                await client.sendText(mensagem.from, `Temperatura atual em ${cidade}: ${emojis[clima.skytext]} ${celsius}°C`)
-                
-            }
-        })
-
-    }
 
 }
 
