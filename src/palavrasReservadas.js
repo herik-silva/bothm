@@ -9,9 +9,18 @@ async function getFundador(msg,cli){
     }
 }
 
+
 const wa = require('@open-wa/wa-automate');
 const weather = require('weather-js');
+const request = require('request');
+require('dotenv/config');
 
+const params = {
+    key: process.env.KEY,
+    host: process.env.HOST
+}
+
+console.log(params.key);
 
 const palavrasReservadas = {
     prefixo: "!",
@@ -61,6 +70,11 @@ const palavrasReservadas = {
             descricao: "Transforma Vídeo/Gif em Figurinha Animada!",
             exemplo: "Envie um vídeo/gif ou marque um vídeo/gif  do chat com o comando !VidFigurinha"
         },
+        {
+            nome: "YoutubeMP3",
+            descricao: "Envia o link de download do video no youtube em formato MP3",
+            exemplo: "Em breve..."
+        }
     ],
     helpComandos: "",
 
@@ -164,6 +178,47 @@ const palavrasReservadas = {
      * 
      * @param {wa.Client} client 
      * @param {wa.Message} mensagem 
+     * @param {Array} parametro 
+     */
+    "YOUTUBEMP3": async(client, mensagem, parametro)=>{
+        const parametro_dividido = parametro[0].split('/');
+        var id_video = parametro_dividido[parametro_dividido.length-1];
+        console.log(process.env.KEY);
+
+        if(id_video.length > 11){
+            id_video = id_video.split('v=')[1];
+        }
+    
+        console.log(id_video);
+
+        const options = {
+            method: 'GET',
+            url: 'https://youtube-to-mp32.p.rapidapi.com/yt_to_mp3',
+            qs: {video_id: id_video},
+            headers: {
+                'x-rapidapi-key': params.key,
+                'x-rapidapi-host': params.host,
+                useQueryString: true
+            }
+        };
+
+        request(options, function (error, response, body) {
+            if (error){
+                client.sendText(mensagem.from, "Não foi possível criar o link do vídeo =(");
+                throw new Error(error);
+            }
+
+            const resposta = JSON.parse(response.body);
+
+            client.sendText(mensagem.from,`Aqui está o link de download: ${resposta.Download_url}`);
+        });
+
+    },
+
+    /**
+     * 
+     * @param {wa.Client} client 
+     * @param {wa.Message} mensagem 
      * @param {Array} paramentro 
      */
     "TEMPERATURA": async(client,mensagem,parametro)=>{
@@ -172,7 +227,8 @@ const palavrasReservadas = {
             "Sunny": '🌤️',
             'Mostly Sunny': '☀️',
             'Cloudy': '⛅',
-            'Mostly Cloudy': '☁️'
+            'Mostly Cloudy': '☁️',
+            'Rain': '🌧'
         }
 
         const options = {
