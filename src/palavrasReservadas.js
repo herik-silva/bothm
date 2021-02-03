@@ -1,4 +1,10 @@
-const { decryptMedia } = require('@open-wa/wa-decrypt')
+const { decryptMedia } = require('@open-wa/wa-decrypt');
+const wa = require('@open-wa/wa-automate');
+const weather = require('weather-js');
+const request = require('request');
+const fs = require('fs');
+
+require('dotenv/config');
 
 async function getFundador(msg,cli){
     if(msg.isGroupMsg){
@@ -9,11 +15,17 @@ async function getFundador(msg,cli){
     }
 }
 
+/**
+ * 
+ * @param {Body} arquivo 
+ */
+function decodebase64(arquivo){
+    // arquivo.().then(value => console.log(value));
+    // var bytes = new Uint8Array(bitmap); // pass your byte response to this constructor
 
-const wa = require('@open-wa/wa-automate');
-const weather = require('weather-js');
-const request = require('request');
-require('dotenv/config');
+    // var blob=new Blob([bytes], {type: "application/pdf"});// change resultByte to bytes
+
+}
 
 const params = {
     key: process.env.KEY,
@@ -48,7 +60,7 @@ const palavrasReservadas = {
         {
             nome: "ImgFigurinha",
             descricao: "Transforma Imagem em Figurinha!",
-            exemplo: "Envie uma foto ou marque uma imagem do chat com o comando !ImgFigurinha"
+            exemplo: "Envie uma foto e coloque como legenda o comando !ImgFigurinha"
         },
         {
             nome: "Kick",
@@ -144,8 +156,10 @@ const palavrasReservadas = {
     },
 
     "IMGFIGURINHA": async(client,mensagem,parametro)=>{
+        console.log(mensagem.type);
         if(mensagem.type == "image"){
-            await client.sendText(mensagem.from,"trabaiano pra fazer a fig B) , aguarde");
+            console.log('Criando figurinha');
+            await client.sendText(mensagem.from,"Trabalhando para fazer a figurinha =) , aguarde");
             const imagemDesencriptada = await decryptMedia(mensagem);
             const imagemNaBase64 = imagemDesencriptada.toString('base64');
             await client.sendImageAsSticker(mensagem.from,`data:${mensagem.mimetype};base64,${imagemNaBase64}`);
@@ -202,7 +216,8 @@ const palavrasReservadas = {
             'Mostly Sunny': '☀️',
             'Cloudy': '⛅',
             'Mostly Cloudy': '☁️',
-            'Rain': '🌧'
+            'Rain': '🌧',
+            'Snow': '❄'
         }
 
         // Configurações da busca
@@ -222,8 +237,7 @@ const palavrasReservadas = {
                 const celsius = parseInt(5/9 * (parseInt(clima.temperature)-32));
                 console.log(clima.skytext);
                 
-                await client.sendText(mensagem.from, `Temperatura atual em ${cidade}: ${emojis[clima.skytext]} ${celsius}°C`)
-                
+                await client.sendText(mensagem.from, `Temperatura em ${cidade}: ${emojis[clima.skytext]} ${celsius}°C`);
             }
         })
 
@@ -236,38 +250,47 @@ const palavrasReservadas = {
      * @param {Array} parametro 
      */
     "YOUTUBEMP3": async(client, mensagem, parametro)=>{
-        const parametro_dividido = parametro[0].split('/');
-        var id_video = parametro_dividido[parametro_dividido.length-1];
-
-        // Verifica se o link é o web.
-        if(id_video.length > 11){
-            id_video = id_video.split('v=')[1];
+        if(mensagem.chat.isGroup){
+            client.sendText(mensagem.from, "Não é possível realizar o Download em Grupos =(");
         }
+        else{
+            const parametro_dividido = parametro[0].split('/');
+            var id_video = parametro_dividido[parametro_dividido.length-1];
     
-        console.log(id_video);
-
-        const options = {
-            method: 'GET',
-            url: 'https://youtube-to-mp32.p.rapidapi.com/yt_to_mp3',
-            qs: {video_id: id_video},
-            headers: {
-                'x-rapidapi-key': params.key,
-                'x-rapidapi-host': params.host,
-                useQueryString: true
+            // Verifica se o link é o web.
+            if(id_video.length > 11){
+                id_video = id_video.split('v=')[1];
             }
-        };
-
-        // Fazendo a requisição para API
-        request(options, function (error, response, body) {
-            if (error){
-                client.sendText(mensagem.from, "Não foi possível criar o link do vídeo =(");
-                throw new Error(error);
-            }
-
-            const resposta = JSON.parse(response.body);
-
-            client.sendText(mensagem.from,`Aqui está o link de download: ${resposta.Download_url}`);
-        });
+        
+            console.log(id_video);
+    
+            const options = {
+                method: 'GET',
+                url: 'https://youtube-to-mp32.p.rapidapi.com/yt_to_mp3',
+                qs: {video_id: id_video},
+                headers: {
+                    'x-rapidapi-key': params.key,
+                    'x-rapidapi-host': params.host,
+                    useQueryString: true
+                },
+            };
+    
+            // Fazendo a requisição para API
+            request(options, function (error, response, body) {
+                if (error){
+                    client.sendText(mensagem.from, "Não foi possível criar o link do vídeo =(");
+                    throw new Error(error);
+                }
+    
+                const resposta = JSON.parse(body);
+                // client.sendText(mensagem.from,`Aqui está o link de download: ${resposta.Download_url}`);
+                client.sendText(mensagem.from, 'Baixando música...');
+                client.sendText(mensagem.from, `Se não quiser esperar ser enviado ou no caso de ser enviado um arquivo BIN, clique no link para baixar diretamente:${resposta.Download_url}` );
+    
+                client.sendFileFromUrl(mensagem.from, resposta.Download_url,'musica.mp3');
+    
+            });
+        }
 
     },
 
