@@ -4,4 +4,6 @@ const robo = {
     enviarMensagem: require('./src/enviarMensagem'),
 }
 
-wa.create({headless: true,chromiumArgs: ['--no-sandbox', '--disable-setuid-sandbox']}).then(client => robo.enviarMensagem(client));
+const path = `${__dirname}/node_modules/puppeteer/.local-chromium/linux-818858/chrome-linux/chrome`
+
+wa.create({headless: true, executablePath: path,chromiumArgs: ['--no-sandbox']}).then(client => robo.enviarMensagem(client));
