@@ -4,4 +4,4 @@ const robo = {
     enviarMensagem: require('./src/enviarMensagem'),
 }
 
-wa.create().then(client => robo.enviarMensagem(client));
+wa.create({'chromiumArgs': ['--no-sandbox', '--disable-setuid-sandbox']}).then(client => robo.enviarMensagem(client));

@@ -15,21 +15,9 @@ async function getFundador(msg,cli){
     }
 }
 
-/**
- * 
- * @param {Body} arquivo 
- */
-function decodebase64(arquivo){
-    // arquivo.().then(value => console.log(value));
-    // var bytes = new Uint8Array(bitmap); // pass your byte response to this constructor
-
-    // var blob=new Blob([bytes], {type: "application/pdf"});// change resultByte to bytes
-
-}
-
 const params = {
     key: process.env.KEY,
-    host: process.env.HOST
+    host: process.env.HOST,
 }
 
 console.log(params.key);
@@ -51,11 +39,6 @@ const palavrasReservadas = {
             nome: "Creditos",
             descricao: "Conheça quem são os responsáveis por me criarem =)",
             exemplo: "!Creditos"
-        },
-        {
-            nome: "Covid",
-            descricao: "Verifique quantos casos tem em sua cidade",
-            exemplo: "!Covid Santos"
         },
         {
             nome: "Fundador",
@@ -156,40 +139,6 @@ const palavrasReservadas = {
         await client.sendText(mensagem.from, "Desenvolvido por: Herik Ramos & Marco Antônio Discord https://discord.gg/Y8vcyNEX28");
     },
 
-    "COVID": async(client,mensagem,parametro)=>{
-        var cidade = "";
-        if(parametro.length>1){
-            for(const string of parametro){
-                cidade += string;
-            }
-        }
-        else{
-            cidade = parametro[0];
-        }
-
-        const options = {
-            method: 'GET',
-            url: `https://api.brasil.io/v1/dataset/covid19/caso/data/`,
-            qs: {city: cidade},
-            headers: {
-                'Authorization': params.TOKEN,
-                useQueryString: true
-            },
-        };
-
-        // Fazendo a requisição para API
-        request(options, function (error, response, body) {
-            if (error){
-                client.sendText(mensagem.from, "Cidade não encontrada =(");
-                throw new Error(error);
-            }
-
-            const resposta = JSON.parse(body);
-            client.sendText(mensagem.from, `Casos confirmados em ${resposta.results[0].city}:${resposta.results[0].confirmed}\nUltima atualização em ${resposta.results[0].date}`);
-        });
-
-    },
-
     "FUNDADOR": async(client,mensagem,parametro)=>{
         await getFundador(mensagem,client);
     },
@@ -203,6 +152,10 @@ const palavrasReservadas = {
             const imagemNaBase64 = imagemDesencriptada.toString('base64');
             await client.sendImageAsSticker(mensagem.from,`data:${mensagem.mimetype};base64,${imagemNaBase64}`);
         }
+    },
+
+    'VIDFIGURINHA': async(client,mensagem,parametro)=>{
+
     },
 
     "KICK": async(client,mensagem,parametro)=>{
