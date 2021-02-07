@@ -15,21 +15,9 @@ async function getFundador(msg,cli){
     }
 }
 
-/**
- * 
- * @param {Body} arquivo 
- */
-function decodebase64(arquivo){
-    // arquivo.().then(value => console.log(value));
-    // var bytes = new Uint8Array(bitmap); // pass your byte response to this constructor
-
-    // var blob=new Blob([bytes], {type: "application/pdf"});// change resultByte to bytes
-
-}
-
 const params = {
     key: process.env.KEY,
-    host: process.env.HOST
+    host: process.env.HOST,
 }
 
 console.log(params.key);
@@ -164,6 +152,10 @@ const palavrasReservadas = {
             const imagemNaBase64 = imagemDesencriptada.toString('base64');
             await client.sendImageAsSticker(mensagem.from,`data:${mensagem.mimetype};base64,${imagemNaBase64}`);
         }
+    },
+
+    'VIDFIGURINHA': async(client,mensagem,parametro)=>{
+
     },
 
     "KICK": async(client,mensagem,parametro)=>{
