@@ -209,9 +209,9 @@ const palavrasReservadas = {
     "SETPROFILEIMAGE": async(client, mensagem, parametro)=>{
         console.log(mensagem.author);
         if(mensagem.type == "image"){
-            const imagemDesencriptada = await decryptMedia(mensagem);
-            const imagemNaBase64 = imagemDesencriptada.toString('base64');
-            await client.setProfilePic(imagemNaBase64);
+            const imagem = await decryptMedia(mensagem);
+            const imagemBase64 = imagem.toString('base64');
+            await client.setProfilePic(imagemBase64);
             await client.sendText(mensagem.from, "Imagem de perfil definida com sucesso!");
         }
     },
@@ -225,8 +225,9 @@ const palavrasReservadas = {
             'Mostly Sunny': '☀️',
             'Cloudy': '⛅',
             'Mostly Cloudy': '☁️',
-            'Rain': '🌧',
-            'Snow': '❄'
+            'Rain': '⛈️',
+            'Snow': '❄',
+            'Light Rain': '🌧',
         }
 
         // Configurações da busca
