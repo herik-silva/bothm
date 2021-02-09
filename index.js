@@ -4,4 +4,13 @@ const robo = {
     enviarMensagem: require('./src/enviarMensagem'),
 }
 
-wa.create({headless: true, executablePath:'/home/sagar/workplace/scraping-demo/node_modules/puppeteer/.local-chromium/linux-599821/chrome-linux/chrome',chromiumArgs: ['--no-sandbox', '--disable-setuid-sandbox']}).then(client => robo.enviarMensagem(client));
+const app = require('express')()
+const http = require('http').createServer(app);
+
+http.listen(process.env.PORT, ()=>{
+    console.log("Rodando...");
+})
+
+const path = `${__dirname}/node_modules/puppeteer/.local-chromium/linux-818858/chrome-linux/chrome`
+
+wa.create({headless: true, executablePath: path,chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers']}).then(client => robo.enviarMensagem(client));
