@@ -206,9 +206,12 @@ const palavrasReservadas = {
     },
 
     "TEMPERATURA": async(client,mensagem,parametro)=>{
-        const cidade = parametro[0]; // Nome da cidade
+        var cidade = "";
+        for(const string of parametro){
+            cidade += string + " ";
+        }
 
-        // Lista de emojis 7/?
+        // Lista de emojis 8/?
         const emojis = {
             "Sunny": '🌤️',
             'Mostly Sunny': '☀️',
@@ -217,6 +220,7 @@ const palavrasReservadas = {
             'Rain': '⛈️',
             'Snow': '❄',
             'Light Rain': '🌧',
+            'Rain Shower': '🌦️',
         }
 
         // Configurações da busca
