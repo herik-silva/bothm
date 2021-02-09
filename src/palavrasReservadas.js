@@ -15,6 +15,8 @@ async function getFundador(msg,cli){
     }
 }
 
+const adms = ['553798089749@c.us', '553788405438@c.us'];
+
 const params = {
     key: process.env.KEY,
     host: process.env.HOST,
@@ -136,7 +138,7 @@ const palavrasReservadas = {
     },
 
     "CREDITOS": async(client,mensagem,parametro)=>{
-        await client.sendText(mensagem.from, "Desenvolvido por: Herik Ramos & Marco Antônio Discord https://discord.gg/Y8vcyNEX28");
+        await client.sendText(mensagem.from, "Desenvolvido por: Herik Ramos & Marco Antônio Discord https://discord.gg/Y8vcyNEX28 \n\n Link para o projeto: https://github.com/herik-silva/bothm");
     },
 
     "FUNDADOR": async(client,mensagem,parametro)=>{
@@ -197,6 +199,22 @@ const palavrasReservadas = {
         });
 
         await client.sendTextWithMentions(mensagem.from, mensagemPreparada);
+    },
+
+    /**
+     * 
+     * @param {wa.Client} client 
+     * @param {wa.Message} mensagem 
+     * @param {Array} paramentro 
+     */
+    "SETPROFILEIMAGE": async(client, mensagem, parametro)=>{
+        console.log(mensagem.author);
+        if(mensagem.type == "image"){
+            const imagemDesencriptada = await decryptMedia(mensagem);
+            const imagemNaBase64 = imagemDesencriptada.toString('base64');
+            await client.setProfilePic(imagemNaBase64);
+            await client.sendText(mensagem.from, "Imagem de perfil definida com sucesso!");
+        }
     },
 
     "TEMPERATURA": async(client,mensagem,parametro)=>{
