@@ -200,26 +200,10 @@ const palavrasReservadas = {
         await client.sendTextWithMentions(mensagem.from, mensagemPreparada);
     },
 
-    /**
-     * 
-     * @param {wa.Client} client 
-     * @param {wa.Message} mensagem 
-     * @param {Array} paramentro 
-     */
-    "SETPROFILEIMAGE": async(client, mensagem, parametro)=>{
-        console.log(mensagem.author);
-        if(mensagem.type == "image"){
-            const imagem = await decryptMedia(mensagem);
-            const imagemBase64 = imagem.toString('base64');
-            await client.setProfilePic(imagemBase64);
-            await client.sendText(mensagem.from, "Imagem de perfil definida com sucesso!");
-        }
-    },
-
     "TEMPERATURA": async(client,mensagem,parametro)=>{
         const cidade = parametro[0]; // Nome da cidade
 
-        // Lista de emojis 4/?
+        // Lista de emojis 7/?
         const emojis = {
             "Sunny": '🌤️',
             'Mostly Sunny': '☀️',
