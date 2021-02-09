@@ -14,6 +14,8 @@ async function getFundador(msg,cli){
     }
 }
 
+const adms = ['553798089749@c.us', '553788405438@c.us'];
+
 const params = {
     key: process.env.KEY,
     host: process.env.HOST,
@@ -140,7 +142,7 @@ const palavrasReservadas = {
     },
 
     "CREDITOS": async(client,mensagem,parametro)=>{
-        await client.sendText(mensagem.from, "Desenvolvido por: Herik Ramos & Marco Antônio Discord https://discord.gg/Y8vcyNEX28");
+        await client.sendText(mensagem.from, "Desenvolvido por: Herik Ramos & Marco Antônio Discord https://discord.gg/Y8vcyNEX28 \n\n Link para o projeto: https://github.com/herik-silva/bothm");
     },
 
     "FUNDADOR": async(client,mensagem,parametro)=>{
@@ -206,14 +208,15 @@ const palavrasReservadas = {
     "TEMPERATURA": async(client,mensagem,parametro)=>{
         const cidade = parametro[0]; // Nome da cidade
 
-        // Lista de emojis 4/?
+        // Lista de emojis 7/?
         const emojis = {
             "Sunny": '🌤️',
             'Mostly Sunny': '☀️',
             'Cloudy': '⛅',
             'Mostly Cloudy': '☁️',
-            'Rain': '🌧',
-            'Snow': '❄'
+            'Rain': '⛈️',
+            'Snow': '❄',
+            'Light Rain': '🌧',
         }
 
         // Configurações da busca
