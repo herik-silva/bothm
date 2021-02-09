@@ -30,6 +30,11 @@ const palavrasReservadas = {
             exemplo: "!Add +55123456789"
         },
         {
+            nome: "Ajuda",
+            descricao: "Lista todos os comandos existentes",
+            exemplo: "!Ajuda"
+        },
+        {
             nome: "AnimFigurinha",
             descricao: "Cria uma figurinha animada do link enviado. Acesse www.giphy.com e copie e escolha um gif.(Funciona apenas nesse site)",
             exemplo: "!Animfigurinha https://media.giphy.com/media/p37zQEvmBhwLipmiqV/giphy.gif"
@@ -41,7 +46,7 @@ const palavrasReservadas = {
         },
         {
             nome: "Fundador",
-            descricao: "Mostra o criador do Grupo!",
+            descricao: "Mostra o criador do Grupo.",
             exemplo: "!Fundador"
         },
         {
