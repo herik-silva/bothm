@@ -15,7 +15,7 @@ app.get('/', (req,res)=>{
     res.sendFile(`index.html`)
 })
 
-http.listen(3000, ()=>{
+http.listen(process.env.PORT, ()=>{
     console.log("Rodando...");
 })
 
