@@ -206,11 +206,8 @@ const palavrasReservadas = {
     },
 
     "TEMPERATURA": async(client,mensagem,parametro)=>{
-        var cidade = "";
-        for(const string of parametro){
-            cidade += string + " ";
-        }
-
+        const cidade = parametro[0];
+        
         // Lista de emojis 8/?
         const emojis = {
             "Sunny": '🌤️',
