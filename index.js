@@ -4,8 +4,16 @@ const robo = {
     enviarMensagem: require('./src/enviarMensagem'),
 }
 
-const app = require('express')()
+const express = require('express');
+const app = express();
 const http = require('http').createServer(app);
+
+
+app.use(express.static(__dirname+"/page/"));
+
+app.get('/', (req,res)=>{
+    res.sendFile(`index.html`)
+})
 
 http.listen(process.env.PORT, ()=>{
     console.log("Rodando...");
