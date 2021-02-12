@@ -137,7 +137,7 @@ const palavrasReservadas = {
     },
 
     "CREDITOS": async(client,mensagem,parametro)=>{
-        await client.sendText(mensagem.from, "Desenvolvido por: Herik Ramos & Marco Antônio Discord https://discord.gg/Y8vcyNEX28 \n\n Link para o projeto: https://github.com/herik-silva/bothm");
+        await client.sendText(mensagem.from, "Desenvolvido por:\nHerik Ramos\nMarco Antônio\n\nDiscord:\nhttps://discord.gg/Y8vcyNEX28\n\nLink para o projeto: https://github.com/herik-silva/bothm");
     },
 
     "FUNDADOR": async(client,mensagem,parametro)=>{
@@ -146,13 +146,11 @@ const palavrasReservadas = {
 
     "IMGFIGURINHA": async(client,mensagem,parametro)=>{
         console.log(mensagem.type);
-        if(mensagem.type == "image"){
-            console.log('Criando figurinha');
-            await client.sendText(mensagem.from,"Trabalhando para fazer a figurinha =) , aguarde");
-            const imagemDesencriptada = await decryptMedia(mensagem);
-            const imagemNaBase64 = imagemDesencriptada.toString('base64');
-            await client.sendImageAsSticker(mensagem.from,`data:${mensagem.mimetype};base64,${imagemNaBase64}`);
-        }
+        console.log('Criando figurinha');
+        await client.sendText(mensagem.from,"Aguarde um pouco, estou fazendo sua figurinha 😉");
+        const imagemDesencriptada = await decryptMedia(mensagem);
+        const imagemNaBase64 = imagemDesencriptada.toString('base64');
+        await client.sendImageAsSticker(mensagem.from,`data:${mensagem.mimetype};base64,${imagemNaBase64}`);
     },
 
     'VIDFIGURINHA': async(client,mensagem,parametro)=>{
@@ -184,9 +182,11 @@ const palavrasReservadas = {
      * 
      * @param {wa.Client} client 
      * @param {wa.Message} mensagem 
-     * @param {Array} paramentro 
+     * @param {Array} parametro 
      */
     "MENCIONARTODOS": async(client, mensagem, parametro)=>{
+        const msgEnviada = parametro != null ? parametro.join(' ') : null;
+
         const listaDeMembros = mensagem.chat.groupMetadata.participants;
         
         var mensagemPreparada = "|== MENCIONAR TODOS ==|\n";
@@ -197,21 +197,27 @@ const palavrasReservadas = {
             mensagemPreparada += `@${numero} \n`;
         });
 
+        if(msgEnviada != null){
+            mensagemPreparada += `\nMensagem de @${mensagem.author} para todos: ${msgEnviada}`;
+        }
+
         await client.sendTextWithMentions(mensagem.from, mensagemPreparada);
     },
 
     "TEMPERATURA": async(client,mensagem,parametro)=>{
-        const cidade = parametro[0]; // Nome da cidade
+        const cidade = parametro.join(' '); // Nome da cidade
 
-        // Lista de emojis 7/?
+        // Lista de emojis 8/?
         const emojis = {
             "Sunny": '🌤️',
             'Mostly Sunny': '☀️',
-            'Cloudy': '⛅',
-            'Mostly Cloudy': '☁️',
+            'Cloudy': '☁️',
+            'Mostly Cloudy': '🌫️',
+            'Partly Sunny': '⛅',
             'Rain': '⛈️',
             'Snow': '❄',
-            'Light Rain': '🌧',
+            'Light Rain': '🌧️',
+            'Mostly Clear': '🌤️',
         }
 
         // Configurações da busca
@@ -227,11 +233,12 @@ const palavrasReservadas = {
             }
             else{
                 const clima = result[0].current;
-                console.log(clima.temperature + " " + emojis[clima.skytext]);
+                const emojiUsado = emojis[clima.skytext] || "";
+                console.log(clima.temperature + " " + emojiUsado);
                 const celsius = parseInt(5/9 * (parseInt(clima.temperature)-32));
                 console.log(clima.skytext);
                 
-                await client.sendText(mensagem.from, `Temperatura em ${cidade}: ${emojis[clima.skytext]} ${celsius}°C`);
+                await client.sendText(mensagem.from, `Temperatura em ${cidade}: ${emojiUsado} ${celsius}°C`);
             }
         })
 
@@ -244,20 +251,12 @@ const palavrasReservadas = {
      * @param {Array} parametro 
      */
     "YOUTUBEMP3": async(client, mensagem, parametro)=>{
-        if(mensagem.chat.isGroup){
-            client.sendText(mensagem.from, "Não é possível realizar o Download em Grupos =(");
-        }
-        else{
-            const parametro_dividido = parametro[0].split('/');
+        const parametro_dividido = parametro[0].split('/');
+        if(parametro_dividido.length > 1){
             var id_video = parametro_dividido[parametro_dividido.length-1];
-    
-            // Verifica se o link é o web.
-            if(id_video.length > 11){
-                id_video = id_video.split('v=')[1];
-            }
-        
+
             console.log(id_video);
-    
+            
             const options = {
                 method: 'GET',
                 url: 'https://youtube-to-mp32.p.rapidapi.com/yt_to_mp3',
@@ -270,7 +269,7 @@ const palavrasReservadas = {
             };
     
             // Fazendo a requisição para API
-            request(options, function (error, response, body) {
+            request(options, async function (error, response, body) {
                 if (error){
                     client.sendText(mensagem.from, "Não foi possível criar o link do vídeo =(");
                     throw new Error(error);
@@ -279,13 +278,13 @@ const palavrasReservadas = {
                 const resposta = JSON.parse(body);
                 // client.sendText(mensagem.from,`Aqui está o link de download: ${resposta.Download_url}`);
                 client.sendText(mensagem.from, 'Baixando música...');
-                client.sendText(mensagem.from, `Se não quiser esperar ser enviado ou no caso de ser enviado um arquivo BIN, clique no link para baixar diretamente:${resposta.Download_url}` );
-    
                 client.sendFileFromUrl(mensagem.from, resposta.Download_url,'musica.mp3');
-    
+                client.sendText(mensagem.from, `A música foi armazenada no seu dispositivo =). Se não encontrar, baixe no link diretamente -> ${resposta.Download_url}` );
             });
         }
-
+        else{
+            await client.sendText(mensagem.from, "Link inválido =(");
+        }
     },
 
 }
