@@ -14,14 +14,11 @@ async function getFundador(msg,cli){
     }
 }
 
-const adms = ['553798089749@c.us', '553788405438@c.us'];
-
 const params = {
     key: process.env.KEY,
     host: process.env.HOST,
+    adm: [process.env.ADM_A, process.env.ADM_B]
 }
-
-console.log(params.key);
 
 const palavrasReservadas = {
     prefixo: "!",
@@ -150,16 +147,16 @@ const palavrasReservadas = {
     },
 
     "IMGFIGURINHA": async(client,mensagem,parametro)=>{
-        console.log(mensagem.type);
-        console.log('Criando figurinha');
-        await client.sendText(mensagem.from,"Aguarde um pouco, estou fazendo sua figurinha 😉");
-        const imagemDesencriptada = await decryptMedia(mensagem);
-        const imagemNaBase64 = imagemDesencriptada.toString('base64');
-        await client.sendImageAsSticker(mensagem.from,`data:${mensagem.mimetype};base64,${imagemNaBase64}`);
-    },
-
-    'VIDFIGURINHA': async(client,mensagem,parametro)=>{
-
+        if(mensagem.type=="image"){
+            console.log('Criando figurinha');
+            await client.sendText(mensagem.from,"Aguarde um pouco, estou fazendo sua figurinha 😉");
+            const imagemDesencriptada = await decryptMedia(mensagem);
+            console.log('decriptografada');
+            const imagemNaBase64 = imagemDesencriptada.toString('base64');
+            console.log('Só enviar');
+            await client.sendImageAsSticker(mensagem.from,`data:${mensagem.mimetype};base64,${imagemNaBase64}`);
+            console.log('Enviado!');
+        }
     },
 
     "KICK": async(client,mensagem,parametro)=>{
@@ -245,7 +242,7 @@ const palavrasReservadas = {
                 
                 await client.sendText(mensagem.from, `Temperatura em ${cidade}: ${emojiUsado} ${celsius}°C`);
             }
-        })
+        });
 
     },
 
@@ -281,10 +278,14 @@ const palavrasReservadas = {
                 }
     
                 const resposta = JSON.parse(body);
-                // client.sendText(mensagem.from,`Aqui está o link de download: ${resposta.Download_url}`);
-                client.sendText(mensagem.from, 'Baixando música...');
-                client.sendFileFromUrl(mensagem.from, resposta.Download_url,'musica.mp3');
-                client.sendText(mensagem.from, `A música foi armazenada no seu dispositivo =). Se não encontrar, baixe no link diretamente -> ${resposta.Download_url}` );
+                if(resposta.status == "Sucess"){
+                    client.sendText(mensagem.from, 'Baixando música...');
+                    client.sendFileFromUrl(mensagem.from, resposta.Download_url,'musica.mp3');
+                    client.sendText(mensagem.from, `A música foi armazenada no seu dispositivo =).\nSe não encontrar, baixe no link diretamente -> ${resposta.Download_url}` );
+                }
+                else{
+                    client.sendText(mensagem.from, 'Desculpe, não foi possível realizar o download da música 🥺');
+                }
             });
         }
         else{
