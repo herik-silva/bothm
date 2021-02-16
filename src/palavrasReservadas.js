@@ -44,6 +44,11 @@ const palavrasReservadas = {
             exemplo: "!Creditos"
         },
         {
+            nome: "Encurtar Link",
+            descricao: "Encurta o link enviado.",
+            exemplo: "!Encurtarlink www.google.com"
+        },
+        {
             nome: "Fundador",
             descricao: "Mostra o criador do Grupo.",
             exemplo: "!Fundador"
@@ -140,6 +145,32 @@ const palavrasReservadas = {
 
     "CREDITOS": async(client,mensagem,parametro)=>{
         await client.sendText(mensagem.from, "Desenvolvido por:\nHerik Ramos\nMarco Antônio\n\nDiscord:\nhttps://discord.gg/Y8vcyNEX28\n\nLink para o projeto: https://github.com/herik-silva/bothm");
+    },
+
+    "ENCURTARLINK": async(client,mensagem,parametro)=>{
+        const link = parametro[0];
+        const request = require('request');
+
+        const options = {
+            method: 'POST',
+            url: 'https://url-shortener-service.p.rapidapi.com/shorten',
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'x-rapidapi-key': params.key,
+                'x-rapidapi-host': params.host[1],
+                useQueryString: true
+            },
+            
+            form: {url: link}
+        };
+
+        request(options, async function (error, response, body) {
+            if (error) throw new Error(error);
+
+            console.log(body);
+            const resposta = JSON.parse(body);
+            await client.sendText(mensagem.from, `Aqui está o link =)\n\n${resposta.result_url}`);
+        });
     },
 
     "FUNDADOR": async(client,mensagem,parametro)=>{
@@ -265,7 +296,7 @@ const palavrasReservadas = {
                 qs: {video_id: id_video},
                 headers: {
                     'x-rapidapi-key': params.key,
-                    'x-rapidapi-host': params.host,
+                    'x-rapidapi-host': params.host[0],
                     useQueryString: true
                 },
             };
