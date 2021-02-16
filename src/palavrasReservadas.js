@@ -16,7 +16,7 @@ async function getFundador(msg,cli){
 
 const params = {
     key: process.env.KEY,
-    host: process.env.HOST,
+    host: [process.env.HOST_A, process.env.HOST_B],
     adm: [process.env.ADM_A, process.env.ADM_B]
 }
 
