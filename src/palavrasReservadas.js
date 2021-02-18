@@ -309,7 +309,7 @@ const palavrasReservadas = {
                 }
     
                 const resposta = JSON.parse(body);
-                if(resposta.status == "Sucess"){
+                if(resposta.Status == "Sucess"){
                     client.sendText(mensagem.from, 'Baixando música...');
                     client.sendFileFromUrl(mensagem.from, resposta.Download_url,'musica.mp3');
                     client.sendText(mensagem.from, `A música foi armazenada no seu dispositivo =).\nSe não encontrar, baixe no link diretamente -> ${resposta.Download_url}` );
