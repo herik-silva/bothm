@@ -24,11 +24,6 @@ const palavrasReservadas = {
     prefixo: "!",
     listaComandos: [
         {
-            nome: "Add",
-            descricao: "Adiciona um integrante do grupo(O bot precisa ser admin)!",
-            exemplo: "!Add +55123456789"
-        },
-        {
             nome: "Ajuda",
             descricao: "Lista todos os comandos existentes",
             exemplo: "!Ajuda"
@@ -90,35 +85,6 @@ const palavrasReservadas = {
         }
     ],
     helpComandos: "",
-
-    // Método ainda com alguns problemas.
-    "ADD": async(client,mensagem,parametro)=>{
-        // Verificar se o BOT é ADM e se o usuário que mandou a mensagem também é ADM.
-
-        if(parametro!=null && mensagem.isGroupMsg){
-            for(let i=0; i<parametro.length; i++){
-                try{
-                    // Preparando a ID do novo membro
-                    const id = parametro[i] + "@c.us";
-                    await client.addParticipant(mensagem.from, id).then(async adicionado =>{
-                        if(adicionado){
-                            await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
-                        }else{
-                            await client.sendText(mensagem.from, `O número *${parametro[i]}* não pode ser adicionado!`);
-                        }
-                    });
-                   // await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
-                }catch(err){
-                    console.log("ERRO: " + err);
-                    await client.sendText(mensagem.from, `O número *${parametro[i]}* não pode ser adicionado!`);
-                }
-            }
-        }
-        else{
-            console.log("Sem parametros ou não veio de um grupo!");
-            await client.sendText(mensagem.from, `Esse comando requer parâmetros. Ex: ${palavrasReservadas.listaComandos[0].exemplo}`);
-        }
-    },
 
     "AJUDA": async(client,mensagem,parametro)=>{
         await client.sendText(mensagem.from, `*LISTA DE COMANDOS*\n${palavrasReservadas.helpComandos}`);
