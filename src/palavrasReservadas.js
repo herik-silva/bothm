@@ -2,6 +2,7 @@ const { decryptMedia } = require('@open-wa/wa-decrypt');
 const wa = require('@open-wa/wa-automate');
 const weather = require('weather-js');
 const request = require('request');
+var usuarios = [];
 
 require('dotenv/config');
 
@@ -14,6 +15,10 @@ async function getFundador(msg,cli){
     }
 }
 
+function getUsuarios(lista_usuarios){
+    usuarios = lista_usuarios;
+}
+
 const params = {
     key: process.env.KEY,
     host: [process.env.HOST_A, process.env.HOST_B],
@@ -23,11 +28,6 @@ const params = {
 const palavrasReservadas = {
     prefixo: "!",
     listaComandos: [
-        {
-            nome: "Add",
-            descricao: "Adiciona um integrante do grupo(O bot precisa ser admin)!",
-            exemplo: "!Add +55123456789"
-        },
         {
             nome: "Ajuda",
             descricao: "Lista todos os comandos existentes",
@@ -90,35 +90,6 @@ const palavrasReservadas = {
         }
     ],
     helpComandos: "",
-
-    // Método ainda com alguns problemas.
-    "ADD": async(client,mensagem,parametro)=>{
-        // Verificar se o BOT é ADM e se o usuário que mandou a mensagem também é ADM.
-
-        if(parametro!=null && mensagem.isGroupMsg){
-            for(let i=0; i<parametro.length; i++){
-                try{
-                    // Preparando a ID do novo membro
-                    const id = parametro[i] + "@c.us";
-                    await client.addParticipant(mensagem.from, id).then(async adicionado =>{
-                        if(adicionado){
-                            await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
-                        }else{
-                            await client.sendText(mensagem.from, `O número *${parametro[i]}* não pode ser adicionado!`);
-                        }
-                    });
-                   // await client.sendTextWithMentions(mensagem.from, `Bem vindo @${parametro[i]}`);
-                }catch(err){
-                    console.log("ERRO: " + err);
-                    await client.sendText(mensagem.from, `O número *${parametro[i]}* não pode ser adicionado!`);
-                }
-            }
-        }
-        else{
-            console.log("Sem parametros ou não veio de um grupo!");
-            await client.sendText(mensagem.from, `Esse comando requer parâmetros. Ex: ${palavrasReservadas.listaComandos[0].exemplo}`);
-        }
-    },
 
     "AJUDA": async(client,mensagem,parametro)=>{
         await client.sendText(mensagem.from, `*LISTA DE COMANDOS*\n${palavrasReservadas.helpComandos}`);
@@ -289,6 +260,7 @@ const palavrasReservadas = {
             var id_video = parametro_dividido[parametro_dividido.length-1];
 
             console.log(id_video);
+            console.log(params.host[0]);
             
             const options = {
                 method: 'GET',
@@ -309,7 +281,7 @@ const palavrasReservadas = {
                 }
     
                 const resposta = JSON.parse(body);
-                if(resposta.status == "Sucess"){
+                if(resposta.Status == "Success"){
                     client.sendText(mensagem.from, 'Baixando música...');
                     client.sendFileFromUrl(mensagem.from, resposta.Download_url,'musica.mp3');
                     client.sendText(mensagem.from, `A música foi armazenada no seu dispositivo =).\nSe não encontrar, baixe no link diretamente -> ${resposta.Download_url}` );
@@ -324,10 +296,27 @@ const palavrasReservadas = {
         }
     },
 
+    // Comandos ADM
+    "ALERTA": async(client,mensagem,parametro)=>{
+        console.log("Alerta!");
+        if(params.adm.includes(mensagem.from)){
+            console.log("ADM ENVIOU");
+            const mensagemPreparada = parametro.join(' ');
+            console.log("Mensagem: " + mensagemPreparada);
+            usuarios.forEach(usuario => {
+                console.log("Enviando para " + usuario);
+                client.sendText(usuario, mensagemPreparada);
+            });
+        }
+    }
+
 }
 
 for(let comando of palavrasReservadas.listaComandos){
     palavrasReservadas.helpComandos += `*${comando.nome}*\n${comando.descricao}\nComo usar: ${comando.exemplo}\n\n`;
 }
 
-module.exports = palavrasReservadas;
+module.exports = {
+    comandos: palavrasReservadas, 
+    usuarios: getUsuarios
+};
