@@ -1,4 +1,4 @@
-const { decryptMedia } = require('@open-wa/wa-decrypt');
+\\\\\const { decryptMedia } = require('@open-wa/wa-decrypt');
 const wa = require('@open-wa/wa-automate');
 const weather = require('weather-js');
 const request = require('request');
@@ -86,7 +86,7 @@ const palavrasReservadas = {
         {
             nome: "YoutubeMP3",
             descricao: "Envia o link de download do video no youtube em formato MP3",
-            exemplo: "Em breve..."
+            exemplo: "!Youtubemp3 https://youtu.be/qBIxI580dI8"
         }
     ],
     helpComandos: "",
