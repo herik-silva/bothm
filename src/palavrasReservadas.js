@@ -1,4 +1,4 @@
-\\\\\const { decryptMedia } = require('@open-wa/wa-decrypt');
+const { decryptMedia } = require('@open-wa/wa-decrypt');
 const wa = require('@open-wa/wa-automate');
 const weather = require('weather-js');
 const request = require('request');
