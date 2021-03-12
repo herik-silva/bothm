@@ -1,3 +1,4 @@
+const { QRFormat, QRQuality } = require('@open-wa/wa-automate');
 const wa = require('@open-wa/wa-automate');
 
 const robo = {
@@ -21,4 +22,4 @@ http.listen(process.env.PORT, ()=>{
 
 const path = `${__dirname}/node_modules/puppeteer/.local-chromium/linux-818858/chrome-linux/chrome`
 
-wa.create({headless: true, executablePath: path,chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers']}).then(client => robo.enviarMensagem(client));
+wa.create({chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers'], qrPopUpOnly: true}).then(client => robo.enviarMensagem(client)).catch(err => console.log(err));
