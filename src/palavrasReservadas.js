@@ -86,7 +86,7 @@ const palavrasReservadas = {
         {
             nome: "YoutubeMP3",
             descricao: "Envia o link de download do video no youtube em formato MP3",
-            exemplo: "Em breve..."
+            exemplo: "!Youtubemp3 https://youtu.be/qBIxI580dI8"
         }
     ],
     helpComandos: "",
