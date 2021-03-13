@@ -4,6 +4,19 @@ const robo = {
     enviarMensagem: require('./src/enviarMensagem'),
 }
 
-const path = `${__dirname}/node_modules/puppeteer/.local-chromium/linux-818858/chrome-linux/chrome`
+const express = require('express');
+const app = express();
+const http = require('http').createServer(app);
 
-wa.create({headless: true, executablePath: path,chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers']}).then(client => robo.enviarMensagem(client));
+
+app.use(express.static(__dirname+"/page/"));
+
+app.get('/', (req,res)=>{
+    res.sendFile(`index.html`)
+})
+
+http.listen(process.env.PORT, ()=>{
+    console.log("Rodando...");
+})
+
+wa.create({headless: true,chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers']}).then(client => robo.enviarMensagem(client));
