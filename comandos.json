@@ -1,0 +1,64 @@
+{
+    "comandos":[
+        {
+            "nome": "Ajuda",
+            "descricao": "Lista todos os comandos existentes",
+            "exemplo": "!Ajuda"
+        },
+        {
+            "nome": "AnimFigurinha",
+            "descricao": "Cria uma figurinha animada do link enviado. Acesse www.giphy.com e copie e escolha um gif.(Funciona apenas nesse site)",
+            "exemplo": "!Animfigurinha https://media.giphy.com/media/p37zQEvmBhwLipmiqV/giphy.gif"
+        },
+        {
+            "nome": "Desenvolvedores",
+            "descricao": "Conheça quem são os responsáveis por me criarem =)",
+            "exemplo": "!Desenvolvedores"
+        },
+        {
+            "nome": "Encurtar Link",
+            "descricao": "Encurta o link enviado.",
+            "exemplo": "!Encurtarlink www.google.com"
+        },
+        {
+            "nome": "Fundador",
+            "descricao": "Mostra o criador do Grupo.",
+            "exemplo": "!Fundador"
+        },
+        {
+            "nome": "ImgFigurinha",
+            "descricao": "Transforma Imagem em Figurinha!",
+            "exemplo": "Envie uma foto e coloque como legenda o comando !ImgFigurinha"
+        },
+        {
+            "nome": "Kick",
+            "descricao": "Remove um integrante do grupo(O bot precisa ser admin)!",
+            "exemplo": "!kick @mention"
+        },
+        {
+            "nome": "Meme",
+            "descricao": "É enviado um Meme Aleatório!(Em Desenvolvimento)",
+            "exemplo": "!Meme"
+        },
+        {
+            "nome": "Mencionar Todos",
+            "descricao": "Menciona todos os membros do grupo.",
+            "exemplo": "!Mencionartodos"
+        },
+        {
+            "nome": "Temperatura",
+            "descricao": "Descubra a temperatura atual da sua cidade!",
+            "exemplo": "!Temperatura São Paulo"
+        },
+        {
+            "nome": "VidFigurinha",
+            "descricao": "Transforma Vídeo/Gif em Figurinha Animada!(Em Desenvolvimento)",
+            "exemplo": "Envie um vídeo/gif ou marque um vídeo/gif  do chat com o comando !VidFigurinha"
+        },
+        {
+            "nome": "YoutubeMP3",
+            "descricao": "Envia o link de download do video no youtube em formato MP3",
+            "exemplo": "!Youtubemp3 https://youtu.be/qBIxI580dI8"
+        }
+    ]
+}
