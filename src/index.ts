@@ -2,6 +2,21 @@ const wa = require("@open-wa/wa-automate");
 import Robo from "./Robo";
 const robo = new Robo();
 
+const express = require('express');
+const app = express();
+const http = require('http').createServer(app);
+
+console.log(__dirname);
+app.use(express.static(__dirname+"/../page/"));
+
+app.get('/', (req,res)=>{
+    res.sendFile(`index.html`)
+})
+
+http.listen(process.env.PORT || 3000, ()=>{
+    console.log("Rodando...");
+})
+
 function ping(){
     const request = require("request");
     
@@ -28,17 +43,15 @@ function ping(){
     setInterval(()=>{
         request(options, function(error, response, body){
             console.log("Requisição feita!");
-            
+
             request(optionsApi, function(error, response, body){
                 console.log("API Requisição");
             });
         });
-
-
     },1750000);
 }
 
 ping();
 
 
-wa.create({headless: true,chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers']}).then(client => robo.ouvirMensagens(client));
+wa.create({headless: false,chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers']}).then(client => robo.ouvirMensagens(client));
