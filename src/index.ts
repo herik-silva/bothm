@@ -9,17 +9,32 @@ function ping(){
         method: 'GET',
         url: 'https://bothm.herokuapp.com',
     };
+
+    const optionsApi = {
+        method: 'GET',
+        url: 'https://apibothm.herokuapp.com/'
+    }
     
     console.log("Rodando");
     
     request(options, function(error, response, body){
-        console.log(body);
+        console.log("Requisição Bot");
+    });
+
+    request(optionsApi, function(error, response, body){
+        console.log("API Requisição");
     });
     
     setInterval(()=>{
         request(options, function(error, response, body){
-            console.log("Requisição feita!")
+            console.log("Requisição feita!");
+            
+            request(optionsApi, function(error, response, body){
+                console.log("API Requisição");
+            });
         });
+
+
     },1750000);
 }
 

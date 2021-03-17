@@ -39,7 +39,7 @@ class PalavrasReservadas {
         request(options, async(error, response, body)=>{
             console.log(body);
             const clima = JSON.parse(body);
-            const mensagemClima = `Clima em *${cidade}*\nTemperatura: ${clima.temperatura}°C\nProbabilidade de Chuva: ${clima.probabilidadeChuva}\nUmidade: ${clima.umidade}\nVentos em: ${clima.velocidadeVento}`;
+            const mensagemClima = `==========Info Clima==========\nCidade: 🏙️ *${cidade}*\nTemperatura: 🌡️ ${clima.temperatura}°C\nProbabilidade de Chuva: 🌧️ ${clima.probabilidadeChuva}\nUmidade: 💧 ${clima.umidade}\nVelocidade do Vento: 🌬️ ${clima.velocidadeVento}\n===========================`;
             if(response.statusCode==200){
                 await client.sendText(mensagem.from, mensagemClima);
             }
