@@ -53,6 +53,4 @@ function ping(){
 
 ping();
 
-const path = `${__dirname}/../node_modules/puppeteer/.local-chromium/linux-818858/chrome-linux/chrome`;
-
-wa.create({headless: true,executablePath: path,chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers']}).then(client => robo.ouvirMensagens(client));
+wa.create({headless: true,executablePath: process.env.CHROME_PATH,chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers']}).then(client => robo.ouvirMensagens(client));
