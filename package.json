@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --transpile-only --ignore-watch node_modules index"
+    "start": "node ./dist/index",
+    "build": "rimraf dist && tsc"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,9 @@
   },
   "homepage": "https://github.com/herik-silva/bothm#readme",
   "dependencies": {
-    "@open-wa/wa-automate": "^3.9.2"
+    "@open-wa/wa-automate": "^3.9.2",
+    "@types/request": "^2.48.5",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@types/node": "^14.14.35",

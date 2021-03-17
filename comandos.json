@@ -5,15 +5,28 @@
             "descricao": "Lista todos os comandos existentes",
             "exemplo": "!Ajuda"
         },
-        {
-            "nome": "AnimFigurinha",
-            "descricao": "Cria uma figurinha animada do link enviado. Acesse www.giphy.com e copie e escolha um gif.(Funciona apenas nesse site)",
-            "exemplo": "!Animfigurinha https://media.giphy.com/media/p37zQEvmBhwLipmiqV/giphy.gif"
-        },
+
         {
             "nome": "Desenvolvedores",
             "descricao": "Conheça quem são os responsáveis por me criarem =)",
             "exemplo": "!Desenvolvedores"
+        },
+        {
+            "nome": "Mencionar Todos",
+            "descricao": "Menciona todos os membros do grupo. É possível deixar uma mensagem também.",
+            "exemplo": "!Mencionartodos *mensagem*"
+        },
+        {
+            "nome": "Clima",
+            "descricao": "Descubra o clima na sua cidade!",
+            "exemplo": "!Clima São Paulo ou !Clima São Paulo, SP"
+        }
+    ],
+    "comandosEmDesenvolvimento": [
+        {
+            "nome": "AnimFigurinha",
+            "descricao": "Cria uma figurinha animada do link enviado. Acesse www.giphy.com e copie e escolha um gif.(Funciona apenas nesse site)",
+            "exemplo": "!Animfigurinha https://media.giphy.com/media/p37zQEvmBhwLipmiqV/giphy.gif"
         },
         {
             "nome": "Encurtar Link",
@@ -39,16 +52,6 @@
             "nome": "Meme",
             "descricao": "É enviado um Meme Aleatório!(Em Desenvolvimento)",
             "exemplo": "!Meme"
-        },
-        {
-            "nome": "Mencionar Todos",
-            "descricao": "Menciona todos os membros do grupo.",
-            "exemplo": "!Mencionartodos"
-        },
-        {
-            "nome": "Temperatura",
-            "descricao": "Descubra a temperatura atual da sua cidade!",
-            "exemplo": "!Temperatura São Paulo"
         },
         {
             "nome": "VidFigurinha",

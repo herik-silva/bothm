@@ -1,5 +1,6 @@
 import { Client, Message, NonSerializedId } from "@open-wa/wa-automate";
 import fs from "fs";
+import request from "request";
 
 class PalavrasReservadas {
     private prefixo: string = "!";
@@ -23,6 +24,29 @@ class PalavrasReservadas {
 
     async AJUDA(client: Client, mensagem: Message, parametros: Array<string>): Promise<void> {
         await client.sendText(mensagem.from, this.comandoAjuda);
+    }
+
+    async CLIMA(client: Client, mensagem: Message, parametros: Array<string>): Promise<void> {
+        const cidade = parametros.join(" ");
+
+        console.log("Cidade: ", cidade);
+
+        const options = {
+            method: 'GET',
+            url: 'https://apibothm.herokuapp.com/clima/' + cidade
+        }
+
+        request(options, async(error, response, body)=>{
+            console.log(body);
+            const clima = JSON.parse(body);
+            const mensagemClima = `Clima em *${cidade}*\nTemperatura: ${clima.temperatura}°C\nProbabilidade de Chuva: ${clima.probabilidadeChuva}\nUmidade: ${clima.umidade}\nVentos em: ${clima.velocidadeVento}`;
+            if(response.statusCode==200){
+                await client.sendText(mensagem.from, mensagemClima);
+            }
+            else{
+                await client.sendText(mensagem.from, "Cidade não encontrada!\nTente adicionar o estado após o nome da cidade\nExemplo: !clima Salgado, SE");
+            }
+        });
     }
 
     async DESENVOLVEDORES(client: Client, mensagem: Message, parametros: Array<string>): Promise<void> {
