@@ -53,4 +53,4 @@ function ping(){
 
 ping();
 
-wa.create({headless: true,executablePath: __dirname + "/../" + process.env.CHROME_PATH,chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers', '--disable-setuid-sandbox']}).then(client => robo.ouvirMensagens(client));
+wa.create({headless: true,executablePath: process.env.CHROME_PATH,chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers', '--disable-setuid-sandbox']}).then(client => robo.ouvirMensagens(client));
