@@ -1,4 +1,4 @@
-import { Client, Message, NonSerializedId } from "@open-wa/wa-automate";
+import { Client, Message } from "@open-wa/wa-automate";
 import fs from "fs";
 import request from "request";
 
@@ -45,6 +45,35 @@ class PalavrasReservadas {
             }
             else{
                 await client.sendText(mensagem.from, "Cidade não encontrada!\nTente adicionar o estado após o nome da cidade\nExemplo: !clima Salgado, SE");
+            }
+        });
+    }
+
+    async COTACAO(client: Client, mensagem: Message, parametros: Array<string>): Promise<void> {
+        const [moedaBase, moedaFinal] = parametros;
+        console.log(`Moeda Base: ${moedaBase}\nMoeda Final: ${moedaFinal}`);
+
+        // Configurações para acessar a API.
+        const options = {
+            method: 'GET',
+            url: 'https://apibothm.herokuapp.com/moeda',
+            qs: {
+                moedaBase: moedaBase,
+                moedaFinal: moedaFinal
+            }
+        }
+
+        // Realiza a requisição na API de Cotação Monetária.
+        request(options, async(error, response, body)=>{
+            console.log(body);
+
+            const moeda = JSON.parse(body);
+            const mensagemMoeda = `💸====Cotação Monetária====💸\n${moeda.valorMoedaBase} ${moeda.moedaBase} igual a\n*${moeda.valorMoedaFinal} ${moeda.moedaFinal}*\n${moeda.ultimaAtualizacao}💸=========================💸`;
+            if(response.statusCode==200){
+                await client.sendText(mensagem.from, mensagemMoeda);
+            }
+            else{
+                await client.sendText(mensagem.from, "Moeda não encontrada.");
             }
         });
     }
