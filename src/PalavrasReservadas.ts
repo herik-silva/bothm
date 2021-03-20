@@ -68,7 +68,7 @@ class PalavrasReservadas {
             console.log(body);
 
             const moeda = JSON.parse(body);
-            const mensagemMoeda = `💸====Cotação Monetária====💸\n${moeda.valorMoedaBase} ${moeda.moedaBase} igual a\n*${moeda.valorMoedaFinal} ${moeda.moedaFinal}*\n${moeda.ultimaAtualizacao}💸=========================💸`;
+            const mensagemMoeda = `💸====Cotação Monetária====💸\n${moeda.valorMoedaBase} ${moeda.moedaBase} igual a\n*${moeda.valorMoedaFinal} ${moeda.moedaFinal}*\n${moeda.ultimaAtualizacao}\n💸=========================💸`;
             if(response.statusCode==200){
                 await client.sendText(mensagem.from, mensagemMoeda);
             }
