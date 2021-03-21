@@ -15,42 +15,6 @@ app.get('/', (req,res)=>{
 
 http.listen(process.env.PORT || 3000, ()=>{
     console.log("Rodando...");
-})
-
-function ping(){
-    const request = require("request");
-    
-    const options = {
-        method: 'GET',
-        url: 'https://bothm.herokuapp.com',
-    };
-
-    const optionsApi = {
-        method: 'GET',
-        url: 'https://apibothm.herokuapp.com/'
-    }
-    
-    console.log("Rodando");
-    
-    request(options, function(error, response, body){
-        console.log("Requisição Bot");
-    });
-
-    request(optionsApi, function(error, response, body){
-        console.log("API Requisição");
-    });
-    
-    setInterval(()=>{
-        request(options, function(error, response, body){
-            console.log("Requisição feita!");
-
-            request(optionsApi, function(error, response, body){
-                console.log("API Requisição");
-            });
-        });
-    },1750000);
-}
-
-ping();
+});
 
 wa.create({headless: true,executablePath: process.env.CHROME_PATH,chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers', '--disable-setuid-sandbox']}).then(client => robo.ouvirMensagens(client));

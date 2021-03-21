@@ -44,7 +44,7 @@ class PalavrasReservadas {
                 await client.sendText(mensagem.from, mensagemClima);
             }
             else{
-                await client.sendText(mensagem.from, "Cidade não encontrada!\nTente adicionar o estado após o nome da cidade\nExemplo: !clima Salgado, SE");
+                await client.sendText(mensagem.from, "Cidade não encontrada!");
             }
         });
     }
