@@ -1,6 +1,7 @@
-import { Client, Message } from "@open-wa/wa-automate";
+import { Client, Message, decryptMedia } from "@open-wa/wa-automate";
 import fs from "fs";
 import request from "request";
+import resizeImg from "resize-img";
 
 class PalavrasReservadas {
     private prefixo: string = "!";
@@ -82,6 +83,27 @@ class PalavrasReservadas {
         await client.sendText(mensagem.from, "Desenvolvido por Herik Ramos e Marco Antônio!");
     }
 
+    async PARAIMAGEM(client: Client, mensagem: Message, parametros: Array<string>): Promise<void> {
+        const mensagemSelecionada: Message = mensagem.quotedMsg;
+
+        const imagem: Buffer = await decryptMedia(mensagemSelecionada);
+        const imagemBase64: string = imagem.toString("base64");
+        const imagemPreparada: string = `data:image/gif;base64,${imagemBase64}`;
+
+        await client.sendImage(mensagem.from, imagemPreparada, "imagem",":D");
+    }
+
+    async TESTE(client: Client, mensagem: Message, parametros: Array<string>): Promise<void> {
+        console.log("Testando -> ", __dirname);
+        const imagem: Buffer = fs.readFileSync(__dirname+"/imagem.png");
+        console.log(imagem);
+        const imagemRedimensionada: Buffer = await resizeImg(imagem, {width: 550, height: 550});
+        const imagemBase64: string = imagemRedimensionada.toString("base64");
+        const imagemPreparada: string = `data:image/png;base64,${imagemBase64}`;
+
+        await client.sendMp4AsSticker(mensagem.from, imagemPreparada);
+    }
+
     /**
      * Menciona todos os membros do grupo. É possível passar uma
      * mensagem.
@@ -111,6 +133,34 @@ class PalavrasReservadas {
 
         // Enviando mensagem.
         await client.sendTextWithMentions(mensagem.from, mensagemPreparada);
+    }
+
+    async STICKER(client: Client, mensagem: Message, parametros: Array<string>): Promise<void> {
+        await client.sendText(mensagem.from,"Aguarde um pouco, estou fazendo sua figurinha 😉");
+
+        const mensagemSelecionada: Message = mensagem.quotedMsg || mensagem;
+        console.log(mensagemSelecionada);
+        // Imagem decriptada
+        if(mensagemSelecionada.type == "image"){
+            console.log("Imagem")
+            const imagem: Buffer = await decryptMedia(mensagemSelecionada);
+            const imagemRedimensionada: Buffer = await resizeImg(imagem, { width: 550, height: 550});
+    
+            const imagemBase64: string = imagemRedimensionada.toString("base64");
+            const imagemPreparada: string = `data:${mensagemSelecionada.mimetype};base64,${imagemBase64}`;
+    
+            await client.sendImageAsSticker(mensagem.from, imagemPreparada);
+        }
+        else if(mensagemSelecionada.type == "video"){
+            console.log("Vídeo")
+            const imagem: Buffer = await decryptMedia(mensagemSelecionada);
+            const imagemRedimensionada: Buffer = await resizeImg(imagem, { width: 550, height: 550});
+    
+            const imagemBase64: string = imagemRedimensionada.toString("base64");
+            const imagemPreparada: string = `data:${mensagemSelecionada.mimetype};base64,${imagemBase64}`;
+    
+            await client.sendMp4AsSticker(mensagem.from, imagemPreparada);
+        }
     }
 }
 

@@ -17,4 +17,4 @@ http.listen(process.env.PORT || 3000, ()=>{
     console.log("Rodando...");
 });
 
-wa.create({headless: true,executablePath: process.env.CHROME_PATH,chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers', '--disable-setuid-sandbox']}).then(client => robo.ouvirMensagens(client));
+wa.create({headless: true, executablePath: process.env.CHROME_PATH, chromiumArgs: ['--no-sandbox','--ignore-google-port-numbers', '--disable-setuid-sandbox']}).then(client => robo.ouvirMensagens(client));

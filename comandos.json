@@ -25,6 +25,11 @@
             "nome": "Cotação",
             "descricao": "Pesquisa o valor da moeda base convertida na moeda final. No exemplo abaixo dolar é a moeda base e o real a moeda final.",
             "exemplo": "!Cotacao dolar real"
+        },
+        {
+            "nome": "Sticker",
+            "descricao": "Transforma Imagem em Figurinha!",
+            "exemplo": "Envie uma foto e coloque como legenda o comando !Sticker"
         }
     ],
     "comandosEmDesenvolvimento": [
