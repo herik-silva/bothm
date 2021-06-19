@@ -10,6 +10,7 @@ class PalavrasReservadas {
     constructor(){
         const comandos = JSON.parse(fs.readFileSync(__dirname+"/../comandos.json",{encoding: "utf-8"}));
         
+        // Carregando a lista de comandos para apresentação.
         for(const comando of comandos.comandos){
             this.comandoAjuda += `*${comando.nome}*\n${comando.descricao}\nComo usar: ${comando.exemplo}\n\n`
         }
@@ -28,17 +29,17 @@ class PalavrasReservadas {
     }
 
     async CLIMA(client: Client, mensagem: Message, parametros: Array<string>): Promise<void> {
+        // Concatenando todo o parâmetro em uma única string
         const cidade = parametros.join(" ");
 
-        console.log("Cidade: ", cidade);
-
+        // Opções para requisição
         const options = {
             method: 'GET',
             url: 'https://apibothm.herokuapp.com/clima/' + cidade
         }
 
+        // Realizando a requisição e enviando a resposta.
         request(options, async(error, response, body)=>{
-            console.log(body);
             const clima = JSON.parse(body);
             const mensagemClima = `==========Info Clima==========\nCidade: 🏙️ *${cidade}*\nTemperatura: 🌡️ ${clima.temperatura}°C\nProbabilidade de Chuva: 🌧️ ${clima.probabilidadeChuva}\nUmidade: 💧 ${clima.umidade}\nVelocidade do Vento: 🌬️ ${clima.velocidadeVento}\n===========================`;
             if(response.statusCode==200){
@@ -52,7 +53,6 @@ class PalavrasReservadas {
 
     async COTACAO(client: Client, mensagem: Message, parametros: Array<string>): Promise<void> {
         const [moedaBase, moedaFinal] = parametros;
-        console.log(`Moeda Base: ${moedaBase}\nMoeda Final: ${moedaFinal}`);
 
         // Configurações para acessar a API.
         const options = {
@@ -93,17 +93,6 @@ class PalavrasReservadas {
         await client.sendImage(mensagem.from, imagemPreparada, "imagem",":D");
     }
 
-    async TESTE(client: Client, mensagem: Message, parametros: Array<string>): Promise<void> {
-        console.log("Testando -> ", __dirname);
-        const imagem: Buffer = fs.readFileSync(__dirname+"/imagem.png");
-        console.log(imagem);
-        const imagemRedimensionada: Buffer = await resizeImg(imagem, {width: 550, height: 550});
-        const imagemBase64: string = imagemRedimensionada.toString("base64");
-        const imagemPreparada: string = `data:image/png;base64,${imagemBase64}`;
-
-        await client.sendMp4AsSticker(mensagem.from, imagemPreparada);
-    }
-
     /**
      * Menciona todos os membros do grupo. É possível passar uma
      * mensagem.
@@ -136,13 +125,11 @@ class PalavrasReservadas {
     }
 
     async STICKER(client: Client, mensagem: Message, parametros: Array<string>): Promise<void> {
-        await client.sendText(mensagem.from,"Aguarde um pouco, estou fazendo sua figurinha 😉");
-
+        
         const mensagemSelecionada: Message = mensagem.quotedMsg || mensagem;
-        console.log(mensagemSelecionada);
-        // Imagem decriptada
+
         if(mensagemSelecionada.type == "image"){
-            console.log("Imagem")
+            await client.sendText(mensagem.from,"Aguarde um pouco, estou fazendo sua figurinha 😉");
             const imagem: Buffer = await decryptMedia(mensagemSelecionada);
             const imagemRedimensionada: Buffer = await resizeImg(imagem, { width: 550, height: 550});
     
@@ -150,16 +137,6 @@ class PalavrasReservadas {
             const imagemPreparada: string = `data:${mensagemSelecionada.mimetype};base64,${imagemBase64}`;
     
             await client.sendImageAsSticker(mensagem.from, imagemPreparada);
-        }
-        else if(mensagemSelecionada.type == "video"){
-            console.log("Vídeo")
-            const imagem: Buffer = await decryptMedia(mensagemSelecionada);
-            const imagemRedimensionada: Buffer = await resizeImg(imagem, { width: 550, height: 550});
-    
-            const imagemBase64: string = imagemRedimensionada.toString("base64");
-            const imagemPreparada: string = `data:${mensagemSelecionada.mimetype};base64,${imagemBase64}`;
-    
-            await client.sendMp4AsSticker(mensagem.from, imagemPreparada);
         }
     }
 }

@@ -20,7 +20,6 @@ class Robo {
 
         if(!usuarioEncontrado){
             this.usuarios.push(idUsuario);
-            console.log("Usuário adicionado.");
         }
     }
 

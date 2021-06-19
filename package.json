@@ -21,8 +21,10 @@
   "homepage": "https://github.com/herik-silva/bothm#readme",
   "dependencies": {
     "@open-wa/wa-automate": "^3.9.2",
+    "@types/fluent-ffmpeg": "^2.1.17",
     "@types/request": "^2.48.5",
     "express": "^4.17.1",
+    "fluent-ffmpeg": "^1.7.0",
     "request": "^2.88.2",
     "resize-img": "^2.0.0"
   },

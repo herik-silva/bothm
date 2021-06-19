@@ -17,6 +17,13 @@
             "exemplo": "!Mencionartodos *mensagem*"
         },
         {
+            "nome": "Sticker",
+            "descricao": "Transforma Imagem em Figurinha!",
+            "exemplo": "Envie uma foto e coloque como legenda o comando !Sticker"
+        }
+    ],
+    "comandosEmDesenvolvimento": [
+        {
             "nome": "Clima",
             "descricao": "Descubra o clima na sua cidade!",
             "exemplo": "!Clima São Paulo ou !Clima São Paulo, SP"
@@ -26,13 +33,6 @@
             "descricao": "Pesquisa o valor da moeda base convertida na moeda final. No exemplo abaixo dolar é a moeda base e o real a moeda final.",
             "exemplo": "!Cotacao dolar real"
         },
-        {
-            "nome": "Sticker",
-            "descricao": "Transforma Imagem em Figurinha!",
-            "exemplo": "Envie uma foto e coloque como legenda o comando !Sticker"
-        }
-    ],
-    "comandosEmDesenvolvimento": [
         {
             "nome": "AnimFigurinha",
             "descricao": "Cria uma figurinha animada do link enviado. Acesse www.giphy.com e copie e escolha um gif.(Funciona apenas nesse site)",
