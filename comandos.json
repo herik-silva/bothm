@@ -5,7 +5,11 @@
             "descricao": "Lista todos os comandos existentes",
             "exemplo": "!Ajuda"
         },
-
+        {
+            "nome": "Clima",
+            "descricao": "Descubra o clima na sua cidade!",
+            "exemplo": "!Clima São Paulo ou !Clima São Paulo, SP"
+        },
         {
             "nome": "Desenvolvedores",
             "descricao": "Conheça quem são os responsáveis por me criarem =)",
@@ -23,11 +27,6 @@
         }
     ],
     "comandosEmDesenvolvimento": [
-        {
-            "nome": "Clima",
-            "descricao": "Descubra o clima na sua cidade!",
-            "exemplo": "!Clima São Paulo ou !Clima São Paulo, SP"
-        },
         {
             "nome": "Cotação",
             "descricao": "Pesquisa o valor da moeda base convertida na moeda final. No exemplo abaixo dolar é a moeda base e o real a moeda final.",

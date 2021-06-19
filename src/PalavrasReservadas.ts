@@ -35,7 +35,7 @@ class PalavrasReservadas {
         // Opções para requisição
         const options = {
             method: 'GET',
-            url: 'https://apibothm.herokuapp.com/clima/' + cidade
+            url: `${process.env.LINK}/clima/${cidade}`
         }
 
         // Realizando a requisição e enviando a resposta.
